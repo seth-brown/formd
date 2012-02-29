@@ -1,0 +1,87 @@
+#!/usr/bin/env python
+# encoding=utf8
+"""
+Seth Brown
+02-24-12
+
+"""
+from sys import stdin, stdout, argv
+import re
+from collections import OrderedDict
+
+class ForMd(object):
+    """Format mardown text"""
+    def __init__(self, text):
+        super(ForMd, self).__init__()
+        self.text = text
+        self.match_links = re.compile(r'(\[.*?\])\s?(\[.*?\]|\(.*?\))')
+        self.match_refs = re.compile(r'(?<=\n)\[.*?\]:\s?.*')
+        self.data = []
+        # ['[search][1]: ', '[1]: http://search.yahoo.com/  "Yahoo Search"']
+
+    def _links(self):
+        """find Markdown links"""
+        links = re.findall(self.match_links, self.text)
+        for link in links:
+            yield link
+
+    def _refs(self):
+        """find Markdown references"""
+        refs = re.findall(self.match_refs, self.text)
+        refs.sort()
+        refs = OrderedDict(i.split(":", 1) for i in refs)
+        return refs
+
+    def _format(self):
+        """process text"""
+        links = (i for i in self._links())
+        refs = self._refs()
+        for n, link in enumerate(links):
+            text, ref = link
+            ref_num = ''.join(("[",str(n+1),"]: "))
+            if ref in refs.keys():
+                url = refs.get(ref).strip()
+                formd_ref = ''.join((ref_num, url))
+                formd_text = ''.join((text, ref_num))
+                d = [formd_text, formd_ref]
+                self.data.append(d)
+            elif text in refs.keys():
+                url = refs.get(text).strip()
+                formd_ref = ''.join((ref_num, url))
+                formd_text = ''.join((text, ref_num))
+                d = [formd_text, formd_ref]
+                self.data.append(d)
+            elif ref not in refs.keys():
+                parse_ref = ref.strip("()")
+                formd_ref = ''.join((ref_num, parse_ref))
+                formd_text = ''.join((text,ref_num))
+                d = [formd_text, formd_ref]
+                self.data.append(d)
+
+    def convert_md(self, inline=False):
+        """ created referenced or inline markdown """
+        self._format()
+        if inline is True:
+            text_link = iter([''.join((_[0].split("][",1)[0], "](", _[1].split(":",1)[1].strip().split()[0], ")")) for _ in self.data])
+            formd_text = self.match_links.sub(lambda _: next(text_link), md)
+            formd_md = self.match_refs.sub('', formd_text).strip()
+        else:
+            ref_nums = iter([_[0].rstrip(" :") for _ in self.data])
+            formd_text = self.match_links.sub(lambda _: next(ref_nums), md)
+            formd_refs = self.match_refs.sub('', formd_text).strip()
+            references = [i[1] for i in self.data]
+            formd_md = '\n'.join((formd_refs, '\n', '\n'.join(i for i in references)))
+        yield formd_md
+
+
+if __name__ == '__main__':
+    md = stdin.read()
+    text = ForMd(md)
+    if argv[1] == '-r':
+        formd_text = text.convert_md()
+        for t in formd_text:
+            stdout.write(t)
+    elif argv[1] == '-i':
+        formd_text = text.convert_md(inline=True)
+        for t in formd_text:
+            stdout.write(t)
