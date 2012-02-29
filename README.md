@@ -22,11 +22,7 @@ There are two command line option for `formd`:
 + A simple working example of `formd`:  
 `cat ugly_markdown_file.md | formd -r > reference_formatted_file.md`   
 
-Here is a video showing `formd` in action on this document.  
-
-<object type="application/x-shockwave-flash" width="600" height="576" data="http://www.flickr.com/apps/video/stewart.swf?v=109786" classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"> <param name="flashvars" value="intl_lang=en-us&photo_secret=6e3deede51&photo_id=6795500266"></param> <param name="movie" value="http://www.flickr.com/apps/video/stewart.swf?v=109786"></param> <param name="bgcolor" value="#000000"></param> <param name="allowFullScreen" value="true"></param><embed type="application/x-shockwave-flash" src="http://www.flickr.com/apps/video/stewart.swf?v=109786" bgcolor="#000000" allowfullscreen="true" flashvars="intl_lang=en-us&photo_secret=6e3deede51&photo_id=6795500266" height="576" width="600"></embed></object>
-
-See [this post][] for additional usage examples.  
+For more information on `formd` see [this post][] for additional usage examples.  
 
 [HTML]:http://en.wikipedia.org/wiki/HTML
 [5]: http://daringfireball.net/projects/markdown/syntax  "Markdown Docs"
