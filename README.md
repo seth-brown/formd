@@ -6,20 +6,20 @@
 
 `formd` reads and writes to [standard streams](http://en.wikipedia.org/wiki/Standard_streams), so it can be adapted to a wide-range of user work flows. See [this post](http://www.drbunsen.org/formd-a-markdown-formatting-tool.html) for further details and work flow examples for using `formd` with [Vim](http://www.vim.org/) or [TextExpander][TE].
 
-* Dependencies  
+* Dependencies:  
 Python 2.4+
 
 * Installation:  
-+ Download formd and place it somwhere in your path:  
+Download formd and place it somwhere in your path:  
 `git clone https://github.com/drbunsen/formd.git ~/bin/`
 
 * Usage  
 There are two command line option for `formd`:  
-+ To generate referenced Markdown use the `-r` flag:  
+To generate referenced Markdown use the `-r` flag:  
 `formd -r`  
-+ To generate inline Markdown use the `-i` flag:  
+To generate inline Markdown use the `-i` flag:  
 `formd -i`  
-+ A simple working example of `formd`:  
+A simple working example of `formd`:  
 `cat ugly_markdown_file.md | formd -r > reference_formatted_file.md`   
 
 For more information on `formd` see [this post][] for additional usage examples.  
