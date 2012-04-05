@@ -17,7 +17,6 @@ class ForMd(object):
         self.match_links = re.compile(r'(\[.*?\])\s?(\[.*?\]|\(.*?\))')
         self.match_refs = re.compile(r'(?<=\n)\[.*?\]:\s?.*')
         self.data = []
-        # ['[search][1]: ', '[1]: http://search.yahoo.com/  "Yahoo Search"']
 
     def _links(self):
         """find Markdown links"""
