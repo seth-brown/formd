@@ -61,7 +61,7 @@ class ForMd(object):
         """ created referenced or inline markdown """
         self._format()
         if inline is True:
-            text_link = iter([''.join((_[0].split("][",1)[0], "](", _[1].split(":",1)[1].strip().split()[0], ")")) for _ in self.data])
+            text_link = iter([''.join((_[0].split("][",1)[0], "](", _[1].split(":",1)[1].strip(), ")")) for _ in self.data])
             formd_text = self.match_links.sub(lambda _: next(text_link), md)
             formd_md = self.match_refs.sub('', formd_text).strip()
         else:
