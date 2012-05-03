@@ -5,7 +5,8 @@ Seth Brown
 02-24-12
 
 """
-from sys import stdin, stdout, argv
+from sys import stdin, stdout
+import argparse
 import re
 from collections import OrderedDict
 
@@ -18,7 +19,7 @@ class ForMd(object):
         self.match_refs = re.compile(r'(?<=\n)\[.*?\]:\s?.*')
         self.data = []
 
-    def _links(self):
+    def _links(self, ):
         """find Markdown links"""
         links = re.findall(self.match_links, self.text)
         for link in links:
@@ -57,30 +58,37 @@ class ForMd(object):
                 d = [formd_text, formd_ref]
                 self.data.append(d)
 
-    def convert_md(self, inline=False):
+    def convert_md(self, flag='open'):
         """ created referenced or inline markdown """
         self._format()
-        if inline is True:
-            text_link = iter([''.join((_[0].split("][",1)[0], "](", _[1].split(":",1)[1].strip(), ")")) for _ in self.data])
+        if flag == 'inline':
+            text_link = iter([''.join((_[0].split("][",1)[0], 
+                "](", _[1].split(":",1)[1].strip(), ")")) for _ in self.data])
             formd_text = self.match_links.sub(lambda _: next(text_link), md)
             formd_md = self.match_refs.sub('', formd_text).strip()
-        else:
+        elif flag == 'ref':
             ref_nums = iter([_[0].rstrip(" :") for _ in self.data])
             formd_text = self.match_links.sub(lambda _: next(ref_nums), md)
             formd_refs = self.match_refs.sub('', formd_text).strip()
-            references = [i[1] for i in self.data]
+            references = (i[1] for i in self.data)
             formd_md = '\n'.join((formd_refs, '\n', '\n'.join(i for i in references)))
+        elif flag == 'blank':
+            match_one = re.search(self.match_links, self.text).group(0)
+            formd_md = match_one
         yield formd_md
 
-
 if __name__ == '__main__':
+    description = 'formd: A (for)matting (M)ark(d)own tool.' 
+    p = argparse.ArgumentParser(description=description)
+    p.add_argument('-r', '--ref', 
+            help="convert to reference Markdown", action='store_true')
+    p.add_argument('-i', '--inline', 
+            help="convert to inline Markdown", action='store_true')
+    p.add_argument('-o', '--blank', 
+            help="convert to inline Markdown", action='store_true')
+    args = p.parse_args()
     md = stdin.read()
     text = ForMd(md)
-    if argv[1] == '-r':
-        formd_text = text.convert_md()
-        for t in formd_text:
-            stdout.write(t)
-    elif argv[1] == '-i':
-        formd_text = text.convert_md(inline=True)
-        for t in formd_text:
-            stdout.write(t)
+    [stdout.write(t) for t in text.convert_md(flag='ref') if (args.ref)]
+    [stdout.write(t) for t in text.convert_md(flag='inline') if (args.inline)]
+    [stdout.write(t) for t in text.convert_md(flag='blank') if (args.blank)]
