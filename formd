@@ -86,14 +86,14 @@ if __name__ == '__main__':
     description = 'formd: A (for)matting (M)ark(d)own tool.' 
     p = argparse.ArgumentParser(description=description)
     p.add_argument('-r', '--ref', 
-            help="convert text to referenced Markdown", action='store_true')
+            help="convert text to referenced Markdown", action='store_false')
     p.add_argument('-i', '--inline', 
-            help="convert text to inline Markdown", action='store_true')
+            help="convert text to inline Markdown", action='store_false')
     p.add_argument('-b', '--blank', 
-            help="convert to inline Markdown", action='store_false')
+            help="convert to opposite style Markdown", action='store_true')
     args = p.parse_args()
     md = stdin.read()
     text = ForMd(md)
     if (args.blank): [stdout.write(t) for t in text.flip()]
-    elif (args.ref): [stdout.write(t) for t in text.ref_md()]
-    elif (args.inline): [stdout.write(t) for t in text.inline_md()]
+    elif (args.ref): [stdout.write(t) for t in text.inline_md()]
+    elif (args.inline): [stdout.write(t) for t in text.ref_md()]
