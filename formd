@@ -89,11 +89,11 @@ if __name__ == '__main__':
             help="convert text to referenced Markdown", action='store_false')
     p.add_argument('-i', '--inline', 
             help="convert text to inline Markdown", action='store_false')
-    p.add_argument('-b', '--blank', 
-            help="convert to opposite style Markdown", action='store_true')
+    p.add_argument('-f', '--flip', 
+            help="convert to opposite style Markdown", action='store_false')
     args = p.parse_args()
     md = stdin.read()
     text = ForMd(md)
-    if (args.blank): [stdout.write(t) for t in text.flip()]
-    elif (args.ref): [stdout.write(t) for t in text.inline_md()]
-    elif (args.inline): [stdout.write(t) for t in text.ref_md()]
+    if (args.flip): [stdout.write(t) for t in text.flip()]
+    elif (args.ref): [stdout.write(t) for t in text.ref_md()]
+    elif (args.inline): [stdout.write(t) for t in text.inline_md()]
