@@ -14,7 +14,8 @@ class ForMd(object):
     def __init__(self, text):
         super(ForMd, self).__init__()
         self.text = text
-        self.match_links = re.compile(r'(\[.*?\])\s?(\[.*?\]|\(.*?\))')
+        self.match_links = re.compile(r'(\[.*?\])\s?(\[.*?\]|\(.*?\))',
+                re.DOTALL | re.MULTILINE)
         self.match_refs = re.compile(r'(?<=\n)\[.*?\]:\s?.*')
         self.data = []
 
@@ -22,7 +23,9 @@ class ForMd(object):
         """find Markdown links"""
         links = re.findall(self.match_links, self.text)
         for link in links:
-            yield link
+            # remove newline breaks from urls spanning multi-lines
+            parsed_link = [s.replace('\n','') for s in link]
+            yield parsed_link
 
     def _refs(self):
         """find Markdown references"""
