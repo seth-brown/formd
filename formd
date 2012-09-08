@@ -14,6 +14,7 @@ class ForMd(object):
     def __init__(self, text):
         super(ForMd, self).__init__()
         self.text = text
+        #TODO: add VERBOSE flag and fix YAML formd
         self.match_links = re.compile(r'(\[.*?\])\s?(\[.*?\]|\(.*?\))',
                 re.DOTALL | re.MULTILINE)
         self.match_refs = re.compile(r'(?<=\n)\[.*?\]:\s?.*')
@@ -23,8 +24,8 @@ class ForMd(object):
         """find Markdown links"""
         links = re.findall(self.match_links, self.text)
         for link in links:
-            # remove newline breaks from urls spanning multi-lines
-            yield [re.sub(r'\n|\r','', s) for s in link]
+            # remove EOLs from urls spanning multiple lines
+            yield [re.sub(r'\n|\r|\r\n','', s) for s in link]
 
     def _refs(self):
         """find Markdown references"""
