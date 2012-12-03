@@ -23,9 +23,10 @@ class ForMd(object):
         """find Markdown links"""
         links = re.findall(self.match_links, self.text)
         for link in links:
-            # remove newline breaks from urls spanning multi-lines
-            parsed_link = [s.replace('\n','') for s in link]
-            yield parsed_link
+            if "\n" in link:
+                # remove newline breaks from urls spanning across lines
+                link = [s.replace('\n','') for s in link]
+            yield link
 
     def _refs(self):
         """find Markdown references"""
