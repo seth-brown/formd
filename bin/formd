@@ -1,0 +1,30 @@
+#!/usr/bin/env python
+# encoding=utf8
+
+import argparse
+import formd
+import sys
+
+
+description = 'formd: A (for)matting (M)ark(d)own tool.'
+p = argparse.ArgumentParser(description=description)
+
+p.add_argument('-r', '--ref', help="convert text to referenced Markdown",
+    action='store_true', default=False)
+p.add_argument('-i', '--inline', help="convert text to inline Markdown",
+    action='store_true', default=False)
+p.add_argument('-f', '--flip', help="convert to opposite style Markdown",
+    action='store_true', default=True)
+p.add_argument('-v', '--version', help="show current version",
+    action='version', version=formd.__version__)
+
+
+args = p.parse_args()
+text = formd.ForMd(sys.stdin.read())
+
+if (args.inline):
+    [sys.stdout.write(t) for t in text.inline_md()]
+elif (args.ref):
+    [sys.stdout.write(t) for t in text.ref_md()]
+elif (args.flip):
+    [sys.stdout.write(t) for t in text.flip()]

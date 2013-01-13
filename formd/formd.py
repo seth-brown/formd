@@ -1,13 +1,13 @@
-#!/usr/bin/env python
 # encoding=utf8
 """
 Seth Brown
 02-24-12
 """
-from sys import stdin, stdout
-import argparse
+
 import re
+
 from collections import OrderedDict
+
 
 class ForMd(object):
     """Format mardown text"""
@@ -25,7 +25,7 @@ class ForMd(object):
         for link in links:
             if "\n" in link:
                 # remove newline breaks from urls spanning across lines
-                link = [s.replace('\n','') for s in link]
+                link = [s.replace('\n', '') for s in link]
             yield link
 
     def _refs(self):
@@ -41,7 +41,7 @@ class ForMd(object):
         refs = self._refs()
         for n, link in enumerate(links):
             text, ref = link
-            ref_num = ''.join(("[",str(n+1),"]: "))
+            ref_num = ''.join(("[", str(n + 1), "]: "))
             if ref in refs.keys():
                 url = refs.get(ref).strip()
                 formd_ref = ''.join((ref_num, url))
@@ -55,15 +55,15 @@ class ForMd(object):
             elif ref not in refs.keys():
                 parse_ref = ref.strip("()")
                 formd_ref = ''.join((ref_num, parse_ref))
-                formd_text = ''.join((text,ref_num))
+                formd_text = ''.join((text, ref_num))
                 self.data.append([formd_text, formd_ref])
 
     def inline_md(self):
         """generate inline markdown """
         self._format()
-        text_link = iter([''.join((_[0].split("][",1)[0], 
-            "](", _[1].split(":",1)[1].strip(), ")")) for _ in self.data])
-        formd_text = self.match_links.sub(lambda _: next(text_link), md)
+        text_link = iter([''.join((_[0].split("][", 1)[0],
+            "](", _[1].split(":", 1)[1].strip(), ")")) for _ in self.data])
+        formd_text = self.match_links.sub(lambda _: next(text_link), self.text)
         formd_md = self.match_refs.sub('', formd_text).strip()
         yield formd_md
 
@@ -71,7 +71,7 @@ class ForMd(object):
         """generate referenced markdown"""
         self._format()
         ref_nums = iter([_[0].rstrip(" :") for _ in self.data])
-        formd_text = self.match_links.sub(lambda _: next(ref_nums), md)
+        formd_text = self.match_links.sub(lambda _: next(ref_nums), self.text)
         formd_refs = self.match_refs.sub('', formd_text).strip()
         references = (i[1] for i in self.data)
         formd_md = '\n'.join((formd_refs, '\n', '\n'.join(i for i in references)))
@@ -85,19 +85,3 @@ class ForMd(object):
         else:
             formd_md = self.inline_md()
         return formd_md
-
-if __name__ == '__main__':
-    description = 'formd: A (for)matting (M)ark(d)own tool.' 
-    p = argparse.ArgumentParser(description=description)
-    p.add_argument('-r', '--ref', 
-            help="convert text to referenced Markdown", action='store_true', default=False)
-    p.add_argument('-i', '--inline', 
-            help="convert text to inline Markdown", action='store_true', default=False)
-    p.add_argument('-f', '--flip', 
-            help="convert to opposite style Markdown", action='store_true', default=True)
-    args = p.parse_args()
-    md = stdin.read()
-    text = ForMd(md)
-    if (args.inline): [stdout.write(t) for t in text.inline_md()]
-    elif (args.ref): [stdout.write(t) for t in text.ref_md()]
-    elif (args.flip): [stdout.write(t) for t in text.flip()]
