@@ -15,7 +15,7 @@ class ForMd(object):
         super(ForMd, self).__init__()
         self.text = text
         self.match_links = re.compile(r'(\[[^^]*?\])\s?(\[.*?\]|\(.*?\))',
-            re.DOTALL | re.MULTILINE)
+            re.MULTILINE)
         self.match_refs = re.compile(r'(?<=\n)\[[^^]*?\]:\s?.*')
         self.data = []
 
@@ -58,7 +58,7 @@ class ForMd(object):
     def inline_md(self):
         """generate inline markdown """
         self._format()
-        text_link = iter([''.join((_[0].split("][",1)[0], 
+        text_link = iter([''.join((_[0].split("][",1)[0],
             "](", _[1].split(":",1)[1].strip(), ")")) for _ in self.data])
         formd_text = self.match_links.sub(lambda _: next(text_link), md)
         formd_md = self.match_refs.sub('', formd_text).strip()
@@ -84,13 +84,13 @@ class ForMd(object):
         return formd_md
 
 if __name__ == '__main__':
-    description = 'formd: A (for)matting (M)ark(d)own tool.' 
+    description = 'formd: A (for)matting (M)ark(d)own tool.'
     p = argparse.ArgumentParser(description=description)
-    p.add_argument('-r', '--ref', 
+    p.add_argument('-r', '--ref',
             help="convert text to referenced Markdown", action='store_true', default=False)
-    p.add_argument('-i', '--inline', 
+    p.add_argument('-i', '--inline',
             help="convert text to inline Markdown", action='store_true', default=False)
-    p.add_argument('-f', '--flip', 
+    p.add_argument('-f', '--flip',
             help="convert to opposite style Markdown", action='store_true', default=True)
     args = p.parse_args()
     md = stdin.read()
