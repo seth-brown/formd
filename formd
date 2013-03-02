@@ -16,7 +16,7 @@ class ForMd(object):
         self.text = text
         self.match_links = re.compile(r'(\[[^^]*?\])\s?(\[.*?\]|\(.*?\))',
             re.MULTILINE)
-        self.match_refs = re.compile(r'(?<=\n)\[[^^]*?\]:\s?.*')
+        self.match_refs = re.compile(r'(?<=\n)\[[^^\n]*?\]:\s?.*')
         self.data = []
 
     def _links(self, ):
