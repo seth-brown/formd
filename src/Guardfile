@@ -1,0 +1,7 @@
+#guard :shell, all_on_start: true do
+
+guard :shell do
+  watch /formd\.py/ do
+  `python tests/tests.py`
+  end
+end
