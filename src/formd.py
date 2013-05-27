@@ -17,8 +17,8 @@ class ForMd(object):
     def __init__(self, text):
         super(ForMd, self).__init__()
         self.text = text
-        self.match_links = re.compile(r"""(\[[^^]*?\])\s?         # text
-                                      (\[.*?\]|\(.*?\r?\n?.*?\))  # ref or url
+        self.match_links = re.compile(r"""(\[[^^]*?\])\s?             # text
+                                      (\[.*?\]|\(.*?\r?\n?.*?\)\)?)   # ref/url
                                        """, re.MULTILINE | re.X)
         self.match_refs = re.compile(r'(?<=\n)\[[^^\r?\n]*?\]:\s?.*')
         self.data = []
@@ -54,7 +54,8 @@ class ForMd(object):
                 formd_text = ''.join((text, ref_num))
                 self.data.append([formd_text, formd_ref])
             elif ref not in refs.keys():
-                parse_ref = ref.strip("()")
+                # remove the leading/training parens
+                parse_ref = ref[1:-1]
                 formd_ref = ''.join((ref_num, parse_ref))
                 formd_text = ''.join((text,ref_num))
                 self.data.append([formd_text, formd_ref])
