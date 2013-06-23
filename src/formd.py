@@ -26,8 +26,9 @@ class ForMd(object):
     def _links(self):
         """ Find Markdown links"""
         links = re.findall(self.match_links, self.text)
-        for link in links:
-            yield link
+        for (text, ref)  in links:
+            ref = ref.replace('\n', '').replace('\r', '')
+            yield (text, ref)
 
     def _refs(self):
         """ Find Markdown references"""

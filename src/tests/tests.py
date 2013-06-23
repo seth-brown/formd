@@ -34,7 +34,7 @@ class TestForMd(unittest.TestCase):
         """ Format URLs spanning across a line break
         """
         cross_inl = self.inl.replace('http:', 'http:\n')
-        cross_ref = self.ref.replace('http:', 'http:\n')
+        cross_ref = self.ref.replace('http:', 'http:')
         f = ForMd(cross_inl)
         ref_conv = list(f.ref_md())[0]
         self.assertEqual(cross_ref, ref_conv)
