@@ -12,14 +12,16 @@ from collections import OrderedDict
 __version__ = '1.0.0'
 __all__ = ['ForMd']
 
+
 class ForMd(object):
     """ Format Markdown text"""
     def __init__(self, text):
         super(ForMd, self).__init__()
         self.text = text
-        self.match_links = re.compile(r"""(\[[^^]*?\])\s?             # text
-                                      (\[.*?\]|\(.*?\r?\n?.*?\)\)?)   # ref/url
-                                       """, re.MULTILINE | re.X)
+        self.match_links = re.compile(r"""(\[[^^\[\]:]*?\])\s?? # text
+                                      (\[[^\[\]:]*?\]|          # ref
+                                      \(.*?\r?\n?.*?\)\)?)      # url
+                                      """, re.MULTILINE | re.X)
         self.match_refs = re.compile(r'(?<=\n)\[[^^\r?\n]*?\]:\s?.*')
         self.data = []
 
@@ -64,8 +66,8 @@ class ForMd(object):
     def inline_md(self):
         """ Generate inline Markdown"""
         self._format()
-        text_link = iter([''.join((_[0].split("][",1)[0],
-            "](", _[1].split(":",1)[1].strip(), ")")) for _ in self.data])
+        text_link = iter([''.join((_[0].split("][", 1)[0],
+            "](", _[1].split(":", 1)[1].strip(), ")")) for _ in self.data])
         formd_text = self.match_links.sub(lambda _: next(text_link), self.text)
         formd_md = self.match_refs.sub('', formd_text).strip()
         yield formd_md
@@ -95,6 +97,7 @@ class ForMd(object):
             formd_md = self.text
         return formd_md
 
+
 def main():
     description = 'formd: A (for)matting (M)ark(d)own tool.'
     p = argparse.ArgumentParser(description=description)
@@ -116,4 +119,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-

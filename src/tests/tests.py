@@ -7,6 +7,8 @@ class TestForMd(unittest.TestCase):
     no_md = ''
     ref = '[Markdown][1]\n\n\n[1]: http://en.wikipedia.com/wiki/Markdown'
     inl = '[Markdown](http://en.wikipedia.com/wiki/Markdown)'
+    lref = '+ A: [Markdown][1]\n\n\n[1]: http://en.wikipedia.com/wiki/Markdown'
+    linl = '+ A: [Markdown](http://en.wikipedia.com/wiki/Markdown)'
 
     def test_none(self):
         f = ForMd(self.no_md)
@@ -39,6 +41,12 @@ class TestForMd(unittest.TestCase):
         ref_conv = list(f.ref_md())[0]
         self.assertEqual(cross_ref, ref_conv)
 
+    def test_flip_lst_link(self):
+        """ Format links embedded in markdown lists
+        """
+        f = ForMd(self.lref)
+        inline_conv = list(f.inline_md())[0]
+        self.assertEqual(self.linl, inline_conv)
 
 if __name__ == '__main__':
     unittest.main()
