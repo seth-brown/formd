@@ -3,6 +3,7 @@ import sys
 sys.path.append('..')
 from formd import ForMd
 
+
 class TestForMd(unittest.TestCase):
     no_md = ''
     ref = '[Markdown][1]\n\n\n[1]: http://en.wikipedia.com/wiki/Markdown'

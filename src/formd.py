@@ -8,7 +8,6 @@ from sys import stdin, stdout
 import argparse
 import re
 from collections import OrderedDict
-
 __version__ = '1.0.0'
 __all__ = ['ForMd']
 
