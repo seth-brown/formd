@@ -21,7 +21,7 @@ class ForMd(object):
                                       (\[[^\[\]:]*?\]|          # ref
                                       \(.*?\r?\n?.*?\)\)?)      # url
                                       """, re.MULTILINE | re.X)
-        self.match_refs = re.compile(r'(?<=\n)\[[^^\r?\n]*?\]:\s?.*')
+        self.match_refs = re.compile(r'(?<=\n)\s?.*\[[^^\r?\n]*?\]:\s?.*')
         self.data = []
 
     def _links(self):
@@ -34,7 +34,8 @@ class ForMd(object):
     def _refs(self):
         """ Find Markdown references"""
         refs = re.findall(self.match_refs, self.text)
-        refs.sort()
+        refs = sorted([_.lstrip().replace('\n', '').replace('\r', '')
+                for _ in refs])
         refs = OrderedDict(i.split(":", 1) for i in refs)
         return refs
 
