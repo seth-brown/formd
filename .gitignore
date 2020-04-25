@@ -1,2 +1,4 @@
-src/formd.pyc
-src/__init__.pyc
+node_modules
+dist
+coverage
+example

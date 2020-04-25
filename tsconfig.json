@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "target": "es6",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "outDir": "dist",
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "commonjs",
+    "removeComments": true
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "test": "jest",
+    "prepublish": "npm run build",
+    "version" : "npm run format && git add -A src",
+    "postversion" : "git push && git push --tags"
+  }
+}

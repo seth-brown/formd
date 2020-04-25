@@ -1,0 +1,20 @@
+name: Build Status
+
+on: [push]
+
+jobs:
+  github:
+    runs-on: ubuntu-latest    
+    steps:
+      - uses: actions/checkout@v1
+      - name: setup node
+        uses: actions/setup-node@v1
+      - name: install deps
+        run: |
+          npm install
+      - name: run tests
+        run: |
+          npm test
+      - name: build
+        run: |
+          npm run build
