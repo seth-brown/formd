@@ -1,6 +1,6 @@
 {
   "name": "@seth-brown/formd",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "A Markdown CLI formatting tool",
   "author": "Seth Brown <software@seth-brown.net>",
   "keywords": [

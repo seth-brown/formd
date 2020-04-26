@@ -35,6 +35,9 @@ export const processLinks = async(links:LinkArray) => {
   return Promise.resolve(linkData)
 }
 
+const parseList = async() => {
+}
+
 const processTokens = async(tokens:TokenArray) => {
 
   const refObj = tokens.links
@@ -56,12 +59,14 @@ const processTokens = async(tokens:TokenArray) => {
         const linkType = classifyLink(obj.raw)
         if (linkType !== null) {
           const title = obj.title === null ? '': obj.title
+          const text = obj.text === null ? '': obj.text
+          const href = obj.href === null ? '': obj.href
           const refSentinel: Ref = {key: '', href: '', title: ''}
           let datum: Link = {
                         match: obj.raw
-                      , href: obj.href
+                      , href: href
                       , title: title
-                      , text: obj.text
+                      , text: text
                       , class: linkType
                       , ref: refSentinel
                       }
@@ -72,9 +77,15 @@ const processTokens = async(tokens:TokenArray) => {
           }
           links.push(datum)
         }
-      } 
+      }
       if (obj?.tokens) {
         fetchLinks(obj.tokens)
+      }
+      if (obj.type ===  'list') {
+        const listItems = obj.items
+        for (let l=0; l<listItems.length; l++) {
+          fetchLinks(listItems[l].tokens)
+        }
       }
     }
   }
@@ -93,7 +104,7 @@ export const parser = async(md:any, tokens:TokenArray, format:Format) => {
   }
 }
 
-export const app = async(md:any, format:Format) => {
+export const formd = async(md:any, format:Format) => {
   const tokens = marked.lexer(md)
   parser(md, tokens, format)
     .then(res => console.log(res))

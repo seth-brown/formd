@@ -21,6 +21,12 @@ const imgRef = "![GitHub Logo](/images/logo.png)\nFormat: ![Alt Text](url)"
 
 const codeBlock = "`[x][y]`"
 
+// links in inline list
+const inlineListMd = "* a link [here](a.net)\n* [another link](b.net)\n* a [3rd link](c.net) on this line"
+
+// links in reference list
+const referenceListMd = "* a link [here][1]\n* [another link][2]\n* a [3rd link][3] on this line\n\n[1]: a.net\n[2]: b.net\n[3]: c.net"
+
 const genMarkdown = async(md:any, format:Format) => {
   const tokens = marked.lexer(md)
   const res = await parser(md, tokens, format)
@@ -57,11 +63,20 @@ test("inline to reference links", async() => {
   expect(res).toEqual(mdReference)
 })
 
+test("inline list links to reference", async() => {
+  const res = await genMarkdown(inlineListMd, 'reference')
+  expect(res).toEqual(referenceListMd)
+})
+
+test("reference list links to inline", async() => {
+  const res = await genMarkdown(referenceListMd, 'inline')
+  expect(res).toEqual(inlineListMd)
+})
+
 test("do not alter image reference", async() => {
   const res = await genMarkdown(imgRef, 'reference')
   expect(res).toEqual(imgRef)
 })
-
 
 test("do not modify codeblock", async() => {
   const res = await genMarkdown(codeBlock, 'reference')

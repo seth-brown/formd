@@ -9,19 +9,24 @@ export type Format = 'reference' | 'inline'
 export type Token = {
   type: string
   raw: string
-  href: string
+  href: string | null
   title: string | null
-  text: string
+  text: string | null
+  items: Token[]
   tokens: Token[]
 }
 
 export interface TokenArray extends Array<Token>{links?:any}
 
-export type Link = {
+type ListItem = {
+  tokens: Token[]
+}
+
+export interface Link {
   class: string
   match: string
   href: string
-  title: string
+  title: string | null
   text: string
   ref: Ref
 }

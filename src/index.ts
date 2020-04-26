@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
 const { program } = require('commander');
-import { app } from './parser'
+import { formd } from './parser'
 
 program
   .version('2.0.0', '-v, --version')
@@ -14,4 +14,4 @@ const format = (program.inline || program.reference) || 'reference'
 
 process.stdin.resume();
 process.stdin.setEncoding('utf8');
-process.stdin.on('data', (d) => app(d, format))
+process.stdin.on('data', (d) => formd(d, format))
