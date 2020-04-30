@@ -3,7 +3,7 @@ formd: a markdown formatting tool
 
 ![Build Status](https://github.com/seth-brown/formd/workflows/Build%20Status/badge.svg)
 
-`formd` is a CLI tool for (for)matting (m)ark(d)own that allows interconversion between the [two styles](https://github.github.com/gfm/) of Markdown links, inline and referenced. The tool conforms to the Github Flavored Markdown [spec](https://github.github.com/gfm/).
+`formd` is a CLI tool for (for)matting (m)ark(d)own that allows interconversion between the [two styles](https://github.github.com/gfm/#links) of Markdown links, inline and referenced. The tool conforms to the Github Flavored Markdown [spec](https://github.github.com/gfm/).
 
 Installation
 -------------
@@ -23,16 +23,22 @@ Motivation
 
 Inline Markdown is difficult to read, but useful for writing and editing because the linked text and URLs are adjacent to the words you are writing. For example:
 
-> The quick brown [fox](http://en.wikipedia.org/wiki/Fox) jumped over the lazy [dog](http://en.wikipedia.org/wiki/Dog).
+``` markdown
+The quick brown [fox](http://en.wikipedia.org/wiki/Fox) jumped over the lazy [dog](http://en.wikipedia.org/wiki/Dog).
+```
 
 Referenced Markdown is awkward while writing because it requires jumping between links within the text and the reference section of the document. However, referenced Markdown is the superior syntax for reading because URLs do not breakup the flow of words or sentences. For example:
 
-> The quick brown [fox][1] jumped over the lazy [dog][2].
+``` markdown
+The quick brown [fox][1] jumped over the lazy [dog][2].
+```
 
 `formd` provides the best of both worlds by allowing users to quickly toggle Markdown formats between inline while writing and referenced while reading. `formd` reads and writes to standard streams, so it can be adapted to a wide-range of user workflows.
 
 Usage
 -----
+
+`formd` is a command line tool, but its primary use case is with text editors or in conjunction with system tools like snipper expanders or app launchers. From the command line formd can be used as follows:
 
 For help:
 ```
@@ -65,9 +71,7 @@ back to it's original position within the buffer.
 ``` vim
 " a function to execute `formd` and return the cursor back
 " to it's original position within the buffer. 
-
-" This script assumes `formd` is in your path at:
- 
+" This script assumes `formd` is in your path. 
 function! Formd(option)
     :let save_view = winsaveview()
     :let flag = a:option
@@ -83,6 +87,11 @@ endfunction
 nmap <leader>fr :call Formd("-r")<CR>
 nmap <leader>fi :call Formd("-i")<CR>
 ```
+
+Usage with App Launchers
+------------------------
+
+`formd` can be invoked with app launchers like [Alfred](https://www.alfredapp.com). Two Alfred workflows are provided in the repo at `system/alfred/`. These workflows take the contents from the clipboard and covert them to either inline or reference markdown and then paste the converted text into the front most application.
 
 Release History
 ---------
