@@ -18,8 +18,10 @@ export const processLinks = async(links:LinkArray) => {
     const match = link.match
     const refNum = idx + 1
     const bodyLinkRef = `[${link.text}][${refNum}]`
-    const bodyLinkInl = `[${link.text}](${link.href})`
-    const titleText = link.title === '' ? '': `(${link.title})`
+    const titleText = link.title === '' ? '': `"${link.title}"`
+    const bodyLinkInl = link.title === ''
+      ? `[${link.text}](${link.href})`
+      : `[${link.text}](${link.href} ${titleText})`
     const appendixRef  = `[${refNum}]: ${link.href} ${titleText}`
 
     const datum:MarkdownLink = {
@@ -32,7 +34,7 @@ export const processLinks = async(links:LinkArray) => {
                       }
     return datum
   })
-  return Promise.resolve(linkData)
+  return linkData
 }
 
 const parseList = async() => {
@@ -90,7 +92,7 @@ const processTokens = async(tokens:TokenArray) => {
     }
   }
   fetchLinks(tokens)
-  return Promise.resolve(links)
+  return links
 }
 
 export const parser = async(md:any, tokens:TokenArray, format:Format) => {

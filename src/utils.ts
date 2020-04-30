@@ -1,7 +1,7 @@
 import { Format, MarkdownArray } from './interfaces'
 
 // find all reference lines in the appendix
-export const appnRefRe = (ref:string) => new RegExp('\\[' + ref + '\\]:.*')
+export const appnRefRe = (ref:string) => new RegExp('\\[' + ref + '\\]:.*\n?')
 
 // get the text in a markdown reference in the format: [text][1]
 export const getReferenceKey = (text:string) => {
@@ -28,6 +28,7 @@ const linkFmt = (md: string, links:MarkdownArray, format:Format) => {
   let mmd = ''
   let refLines = []
   const stripNewlineEnds = /\s+$/g;
+  const deleteBlankLine = /^\s*\n/gm;
   const linkStyle = format === 'reference'
       ? 'bodyRef'
       : 'bodyInl'
@@ -37,19 +38,19 @@ const linkFmt = (md: string, links:MarkdownArray, format:Format) => {
     mkd = mkd.replace(link.match, link[linkStyle])
     mkd = mkd.replace(re, '')
     mmd = mkd
-    refLines.push(link.appnRef)
+    refLines.push(link.appnRef.trim())
   }
 
   if (format === 'reference') {
-    mmd = mmd.replace(stripNewlineEnds, '');
-    let refStr = refLines.map(d => d.trim()).join('\n')
+    mmd = mmd.trim()
+    let refStr = refLines.join('\n')
     // add a line space between body and reference
     mmd = [mmd, refStr].join('\n\n')
   }
-  return mmd.replace(stripNewlineEnds, '')
+  return mmd.trim()
 }
 
 export const mutateMd = async(md:string, links:MarkdownArray, format:Format) => {
   const mmd = linkFmt(md, links, format)
-  return Promise.resolve(mmd)
+  return mmd
 }
