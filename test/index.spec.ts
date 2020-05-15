@@ -1,8 +1,5 @@
-const marked = require('marked')
 import { parser, formd } from "./../src/parser";
 import { Format } from './../src/interfaces';
-
-marked.setOptions({ gfm: true });
 
 // valid inline links
 const mdInline = "The quick brown [fox](http://en.wikipedia.org/wiki/Fox) jumped over the lazy [dog](http://en.wikipedia.org/wiki/Dog).\n"
