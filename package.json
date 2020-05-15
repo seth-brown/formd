@@ -1,6 +1,6 @@
 {
   "name": "@seth-brown/formd",
-  "version": "2.0.4",
+  "version": "2.0.5",
   "description": "A Markdown CLI formatting tool",
   "author": "Seth Brown <software@seth-brown.net>",
   "keywords": [
@@ -29,12 +29,14 @@
   "devDependencies": {
     "@types/jest": "^25.2.1",
     "@types/node": "^13.13.2",
+    "jest": "^25.4.0",
     "ts-jest": "^25.4.0",
-    "typescript": "^3.8.3",
-    "jest": "^25.4.0"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "commander": "^5.0.0",
-    "marked": "^1.0.0"
+    "remark": "^12.0.0",
+    "remark-inline-links": "^4.0.0",
+    "remark-reference-links": "^5.0.0"
   }
 }
